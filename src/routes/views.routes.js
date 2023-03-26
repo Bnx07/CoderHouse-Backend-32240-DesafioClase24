@@ -37,8 +37,8 @@ router.get('/', passport.authenticate('jwt', {session: false}), async (req, res)
     }
 })
 
-router.get('/:uid/carts/:cid', passport.authenticate('jwt', {session: false}), async (req, res) => { // Funciona
-    let {cid, uid} = req.params.cid;
+router.get('/carts/:cid', passport.authenticate('jwt', {session: false}), async (req, res) => { // Funciona
+    let {cid} = req.params.cid;
     try {
         const isLogin = req.user.user ? true : false;
         const user = req.user.user;
@@ -55,7 +55,8 @@ router.get('/product/:pid', passport.authenticate('jwt', {session: false}), asyn
         const user = req.user.user;
         let pid = req.params.pid;
         let product = await pm.getOne(pid);
-        res.render('product', {product, isLogin, user});
+        let cartId = user.cart[0];
+        res.render('product', {product, isLogin, user, cartId});
     } catch {
         res.render('error');
     }  
